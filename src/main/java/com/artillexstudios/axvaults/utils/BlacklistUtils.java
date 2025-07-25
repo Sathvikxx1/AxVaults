@@ -31,6 +31,12 @@ public class BlacklistUtils {
         return false;
     }
 
+    public static boolean isEmpty() {
+        List<Map<String, Object>> list = CONFIG.getMapList("blacklist-items");
+        Section legacy = CONFIG.getSection("blacklisted-items");
+        return (list == null || list.isEmpty()) && (legacy == null || legacy.getRoutesAsStrings(false).isEmpty());
+    }
+
     private static boolean checkLegacy(ItemStack it) {
         final Section section = CONFIG.getSection("blacklisted-items");
         if (section == null) return false;

@@ -27,6 +27,7 @@ import com.artillexstudios.axvaults.listeners.InventoryCloseListener;
 import com.artillexstudios.axvaults.listeners.PlayerInteractListener;
 import com.artillexstudios.axvaults.listeners.PlayerListeners;
 import com.artillexstudios.axvaults.schedulers.AutoSaveScheduler;
+import com.artillexstudios.axvaults.utils.BlacklistUtils;
 import com.artillexstudios.axvaults.utils.UpdateNotifier;
 import com.artillexstudios.axvaults.vaults.Vault;
 import com.artillexstudios.axvaults.vaults.VaultManager;
@@ -74,7 +75,7 @@ public final class AxVaults extends AxPlugin {
     }
 
     public void enable() {
-        new Metrics(this, 20541);
+       // new Metrics(this, 20541);
 
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         MESSAGES = new Config(new File(getDataFolder(), "messages.yml"), getResource("messages.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
@@ -97,7 +98,12 @@ public final class AxVaults extends AxPlugin {
         threadedQueue.submit(() -> database.load());
 
         getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
-        getServer().getPluginManager().registerEvents(new BlacklistListener(), this);
+
+        // Only register if its not empty
+        if (!BlacklistUtils.isEmpty()) {
+            getServer().getPluginManager().registerEvents(new BlacklistListener(), this);
+        }
+
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryCloseListener(), this);
@@ -107,16 +113,16 @@ public final class AxVaults extends AxPlugin {
         AutoSaveScheduler.start();
         SQLMessaging.start();
 
-        metrics = new AxMetrics(this, 3);
-        metrics.start();
+      //  metrics = new AxMetrics(this, 3);
+      //  metrics.start();
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#55ff00[AxVaults] Loaded plugin!"));
 
-        if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 5417);
+        //if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 5417);
     }
 
     public void disable() {
-        if (metrics != null) metrics.cancel();
+    //    if (metrics != null) metrics.cancel();
         for (Vault vault : VaultManager.getVaults()) {
             AxVaults.getDatabase().saveVault(vault);
         }
