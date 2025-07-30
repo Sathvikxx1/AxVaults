@@ -1,5 +1,6 @@
 package com.artillexstudios.axvaults.listeners;
 
+import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axvaults.AxVaults;
 import com.artillexstudios.axvaults.database.impl.MySQL;
 import com.artillexstudios.axvaults.utils.SoundUtils;
@@ -20,15 +21,17 @@ public class InventoryCloseListener implements Listener {
 
     @EventHandler
     public void onClose(@NotNull InventoryCloseEvent event) {
-        Vault vault = VaultManager.getVault(event.getInventory());
-        if (vault == null) return;
-        AxVaults.getThreadedQueue().submit(() -> {
-            MESSAGEUTILS.sendLang(event.getPlayer(), "vault.closed", Map.of("%num%", "" + vault.getId()));
-            SoundUtils.playSound((Player) event.getPlayer(), MESSAGES.getString("sounds.close"));
+        Scheduler.get().runAsync(() -> {
+            Vault vault = VaultManager.getVault(event.getInventory());
+            if (vault == null) return;
+            AxVaults.getThreadedQueue().submit(() -> {
+                MESSAGEUTILS.sendLang(event.getPlayer(), "vault.closed", Map.of("%num%", "" + vault.getId()));
+                SoundUtils.playSound((Player) event.getPlayer(), MESSAGES.getString("sounds.close"));
 
-            if (AxVaults.getDatabase() instanceof MySQL db) {
-                AxVaults.getDatabase().saveVault(vault);
-            }
+                if (AxVaults.getDatabase() instanceof MySQL db) {
+                    AxVaults.getDatabase().saveVault(vault);
+                }
+            });
         });
     }
 }

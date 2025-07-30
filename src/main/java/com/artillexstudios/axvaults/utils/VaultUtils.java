@@ -1,5 +1,6 @@
 package com.artillexstudios.axvaults.utils;
 
+import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.serializers.Serializers;
 import com.artillexstudios.axvaults.vaults.Vault;
 
@@ -15,7 +16,7 @@ public class VaultUtils {
             cf.complete(bytes);
         };
 
-        ThreadUtils.runSync(runnable);
+        Scheduler.get().runAsync(runnable);
 
         return cf;
     }
