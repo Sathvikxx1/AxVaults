@@ -2,7 +2,6 @@ package com.artillexstudios.axvaults.commands;
 
 import com.artillexstudios.axvaults.AxVaults;
 import com.artillexstudios.axvaults.utils.CommandMessages;
-import com.artillexstudios.axvaults.vaults.VaultManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
@@ -19,16 +18,22 @@ public class CommandManager {
     public static void load() {
         handler = BukkitCommandHandler.create(AxVaults.getInstance());
 
-        handler.getAutoCompleter().registerSuggestion("vaults", (args, sender, command) -> {
-            final Player player = Bukkit.getPlayer(sender.getUniqueId());
-            if (!player.hasPermission("axvaults.openremote")) return new ArrayList<>();
+        handler.getAutoCompleter().registerSuggestion(
+                "vaults", (
+                        args,
+                        sender,
+                        command) -> {
 
-            final ArrayList<String> numbers = new ArrayList<>();
-            for (Integer i : VaultManager.getPlayers().get(player.getUniqueId()).getVaultMap().keySet()) {
-                numbers.add("" + i);
-            }
-            return numbers;
-        });
+                    final Player player = Bukkit.getPlayer(sender.getUniqueId());
+
+                    if (!player.hasPermission("axvaults.openremote"))
+                        return new ArrayList<>();
+
+                    final ArrayList<String> numbers = new ArrayList<>();
+                    numbers.add("<number");
+
+                    return numbers;
+                });
 
         handler.getTranslator().add(new CommandMessages());
         handler.setLocale(Locale.of("en", "US"));

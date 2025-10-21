@@ -54,7 +54,7 @@ delete-empty-vaults: true
 # only enable if you are having performance issues
 # this setting might cause unexcepted bugs, like item loss
 # we suggest creating a spark report and sending it to the developers before using this
-async-item-serializer: false
+async-item-serializer: true
 
 # list of items that CAN'T be put into vaults
 #
