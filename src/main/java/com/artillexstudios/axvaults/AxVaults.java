@@ -20,6 +20,7 @@ import com.artillexstudios.axvaults.database.impl.MySQL;
 import com.artillexstudios.axvaults.database.impl.SQLite;
 import com.artillexstudios.axvaults.database.messaging.SQLMessaging;
 import com.artillexstudios.axvaults.hooks.HookManager;
+import com.artillexstudios.axvaults.hooks.PlaceholderAPIHook;
 import com.artillexstudios.axvaults.libraries.Libraries;
 import com.artillexstudios.axvaults.listeners.BlacklistListener;
 import com.artillexstudios.axvaults.listeners.BlockBreakListener;
@@ -126,7 +127,8 @@ public final class AxVaults extends AxPlugin {
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#55ff00[AxVaults] Loaded plugin!"));
 
-        if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 5417);
+        new PlaceholderAPIHook().register();
+      //  if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 5417);
     }
 
     public void disable() {

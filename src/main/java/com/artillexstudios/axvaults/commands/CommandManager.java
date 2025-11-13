@@ -30,7 +30,7 @@ public class CommandManager {
                         return new ArrayList<>();
 
                     final ArrayList<String> numbers = new ArrayList<>();
-                    numbers.add("<number");
+                    numbers.add("1");
 
                     return numbers;
                 });
